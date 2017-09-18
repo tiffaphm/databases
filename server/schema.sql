@@ -1,9 +1,15 @@
+DROP DATABASE IF EXISTS `chat`;
 CREATE DATABASE chat;
 
 USE chat;
 
+DROP TABLE IF EXISTS `messages`;
 CREATE TABLE messages (
-  /* Describe your table here.*/
+  message_id INT NOT NULL AUTO_INCREMENT,
+  username VARCHAR(100) NOT NULL,
+  message VARCHAR(200) NOT NULL,
+  roomname VARCHAR(100) NOT NULL,
+  PRIMARY KEY ( message_id )
 );
 
 /* Create other tables and define schemas for them here! */
