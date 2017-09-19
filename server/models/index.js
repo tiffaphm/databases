@@ -2,12 +2,21 @@ var db = require('../db');
 
 module.exports = {
   messages: {
-    get: function () {
-
+    get: function (callback) {
+      var sql = 'SELECT username, message, roomname FROM messages';
+      db.dbConnection.query(sql, function (err, result) {
+        if (err) { console.log(err); }
+        console.log('aawerwerqwer', result);
+        callback(result);
+      });
+     
     }, // a function which produces all the messages
-    post: function (message) {
+    post: function (body) {
+      var message = body.message;
+      var roomname = body.roomname;
+      var username = body.username;
       console.log(message);
-      var sql = `INSERT INTO messages (message) VALUES ("${message}")`;
+      var sql = `INSERT INTO messages (username, message, roomname) VALUES ("${username}", "${message}", "${roomname}")`;
       db.dbConnection.query(sql, function (err, result) {
         if (err) { console.log(err); }
         console.log('message inserted');

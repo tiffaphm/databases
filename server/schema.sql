@@ -63,7 +63,9 @@ DROP TABLE IF EXISTS `messages`;
     
 CREATE TABLE `messages` (
   `messages_id` INTEGER NOT NULL AUTO_INCREMENT,
+  `username` VARCHAR(200) NOT NULL DEFAULT 'NOT NULL',
   `message` VARCHAR(200) NOT NULL DEFAULT 'NOT NULL',
+  `roomname` VARCHAR(200) NOT NULL DEFAULT 'NOT NULL',
   PRIMARY KEY (`messages_id`)
 );
 

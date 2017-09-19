@@ -4,16 +4,19 @@ var queryString = require('query-string');
 module.exports = {
   messages: {
     get: function (req, res) {
-      // req.statusCode = 200;
-      // req.setHeader('Content-Type', 'application/json');
-      // req.end(JSON.stringify(message));
+      models.messages.get(function(result) {
+        //res.writeHead(200, {'Content-Type': 'application/json'});
+        console.log('resulsltulstuls', JSON.stringify(result));
+        res.send(JSON.stringify(result));
+      });
+
     }, // a function which handles a get request for all messages
     post: function (req, res) {
       console.log('checking if POST request is working');
       var body = req.body;
       req.statusCode = 302;
-      res.end('response should end');
-      models.messages.post(body.message);
+      res.end();
+      models.messages.post(body);
     } // a function which handles posting a message to the database
   },
 
