@@ -63,7 +63,7 @@ var displayData = function(data, user) {
     if (user === data.results[i].username || !user) {
       var timestamp = moment(data.results[i].createdAt).format('h:mm:ss a');
       var $result = $('<li></li>').attr('data-username', data.results[i].username);
-      var $message = $('<p></p>').text(data.results[i].message);
+      var $message = $('<p></p>').text(data.results[i].text);
       var $userName = $('<a></a>').text(data.results[i].username).addClass('onlyUser');
       var $likeUser = $('<a></a>').addClass('addUser').text(': ');
       var $timeStamp = $('<span></span>').text(timestamp);
@@ -111,7 +111,7 @@ var postData = function(message, username) {
     type: 'POST',
     data: JSON.stringify({
       username: username,
-      message: message,
+      text: message,
       roomname: 'lobby'
     }),
     success: function(data) {

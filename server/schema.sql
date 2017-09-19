@@ -29,32 +29,6 @@ USE chat;
 -- SET FOREIGN_KEY_CHECKS=0;
 
 -- ---
--- Table 'username'
--- 
--- ---
-
-DROP TABLE IF EXISTS `username`;
-    
-CREATE TABLE `username` (
-  `username_id` INTEGER NOT NULL AUTO_INCREMENT,
-  `username` VARCHAR(100) NOT NULL UNIQUE,
-  PRIMARY KEY (`username_id`)
-);
-
--- ---
--- Table 'roomname'
--- 
--- ---
-
-DROP TABLE IF EXISTS `roomname`;
-    
-CREATE TABLE `roomname` (
-  `roomname_id` INTEGER NOT NULL AUTO_INCREMENT,
-  `roomname` VARCHAR(100) NOT NULL DEFAULT 'NOT NULL',
-  PRIMARY KEY (`roomname_id`)
-);
-
--- ---
 -- Table 'messages'
 -- 
 -- ---
@@ -62,25 +36,36 @@ CREATE TABLE `roomname` (
 DROP TABLE IF EXISTS `messages`;
     
 CREATE TABLE `messages` (
-  `messages_id` INTEGER NOT NULL AUTO_INCREMENT,
-  `username` VARCHAR(200) NOT NULL DEFAULT 'NOT NULL',
-  `message` VARCHAR(200) NOT NULL DEFAULT 'NOT NULL',
-  `roomname` VARCHAR(200) NOT NULL DEFAULT 'NOT NULL',
-  PRIMARY KEY (`messages_id`)
+  `id` INTEGER(10) NOT NULL AUTO_INCREMENT,
+  `text` VARCHAR(400) NOT NULL,
+  `username_id` INTEGER(4) NOT NULL,
+  `roomname_id` INTEGER(4) NOT NULL,
+  PRIMARY KEY (`id`)
 );
 
 -- ---
--- Table 'user_room'
+-- Table 'users'
 -- 
 -- ---
 
-DROP TABLE IF EXISTS `user_room`;
+DROP TABLE IF EXISTS `users`;
     
-CREATE TABLE `user_room` (
-  `id` INTEGER NOT NULL AUTO_INCREMENT,
-  `username_id` INTEGER NOT NULL,
-  `roomname_id` INTEGER NOT NULL,
-  `messages_id` INTEGER NOT NULL,
+CREATE TABLE `users` (
+  `id` INTEGER(10) NOT NULL AUTO_INCREMENT,
+  `username` VARCHAR(100) NOT NULL,
+  PRIMARY KEY (`id`)
+);
+
+-- ---
+-- Table 'rooms'
+-- 
+-- ---
+
+DROP TABLE IF EXISTS `rooms`;
+    
+CREATE TABLE `rooms` (
+  `id` INTEGER(10) NOT NULL AUTO_INCREMENT,
+  `roomname` VARCHAR(100) NOT NULL,
   PRIMARY KEY (`id`)
 );
 
@@ -88,28 +73,24 @@ CREATE TABLE `user_room` (
 -- Foreign Keys 
 -- ---
 
--- ALTER TABLE `user_room` ADD FOREIGN KEY (username_id) REFERENCES `username` (`username_id`);
--- ALTER TABLE `user_room` ADD FOREIGN KEY (roomname_id) REFERENCES `roomname` (`roomname_id`);
--- ALTER TABLE `user_room` ADD FOREIGN KEY (messages_id) REFERENCES `messages` (`messages_id`);
+ALTER TABLE `messages` ADD FOREIGN KEY (username_id) REFERENCES `users` (`id`);
+ALTER TABLE `messages` ADD FOREIGN KEY (roomname_id) REFERENCES `rooms` (`id`);
 
 -- ---
 -- Table Properties
 -- ---
 
--- ALTER TABLE `username` ENGINE=InnoDB DEFAULT CHARSET=utf8 COLLATE=utf8_bin;
--- ALTER TABLE `roomname` ENGINE=InnoDB DEFAULT CHARSET=utf8 COLLATE=utf8_bin;
 -- ALTER TABLE `messages` ENGINE=InnoDB DEFAULT CHARSET=utf8 COLLATE=utf8_bin;
--- ALTER TABLE `user_room` ENGINE=InnoDB DEFAULT CHARSET=utf8 COLLATE=utf8_bin;
+-- ALTER TABLE `users` ENGINE=InnoDB DEFAULT CHARSET=utf8 COLLATE=utf8_bin;
+-- ALTER TABLE `rooms` ENGINE=InnoDB DEFAULT CHARSET=utf8 COLLATE=utf8_bin;
 
 -- ---
 -- Test Data
 -- ---
 
--- INSERT INTO `username` (`id`,`username`) VALUES
--- ('','');
--- INSERT INTO `roomname` (`id`,`roomname`) VALUES
--- ('','');
--- INSERT INTO `messages` (`id`,`message`) VALUES
--- ('','');
--- INSERT INTO `user_room` (`id`,`username_id`,`roomname_id`,`messages_id`) VALUES
+-- INSERT INTO `messages` (`id`,`text`,`username_id`,`roomname_id`) VALUES
 -- ('','','','');
+-- INSERT INTO `users` (`id`,`username`) VALUES
+-- ('','');
+-- INSERT INTO `rooms` (`id`,`roomname`) VALUES
+-- ('','');

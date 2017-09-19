@@ -23,12 +23,45 @@ module.exports = {
 
   users: {
     // Ditto as above
-    get: function (req, res) {},
+    get: function (req, res) {
+      console.log('users get request');
+      // get all users from model/db
+      // response back with the usernames
+      res.writeHead(200, {'Content-Type': 'application/json'});
+
+      models.users.get(null, function(result) {
+        console.log('users get request is', result);
+        var obj = {results: result};
+        res.end(JSON.stringify(obj));
+      });
+
+    },
     post: function (req, res) {
       var body = req.body;
       req.statusCode = 302;
       res.end();
       models.users.post(body.username);
+    }
+  },
+
+  rooms: {
+    // Ditto as above
+    get: function (req, res) {
+      // get all users from model/db
+      // response back with the roomnames
+      res.writeHead(200, {'Content-Type': 'application/json'});
+
+      models.rooms.get(null, function(result) {
+        var obj = {results: result};
+        res.end(JSON.stringify(obj));
+      });
+
+    },
+    post: function (req, res) {
+      var body = req.body;
+      req.statusCode = 302;
+      res.end();
+      models.rooms.post(body.roomname);
     }
   }
 };
