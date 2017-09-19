@@ -34,7 +34,7 @@ app = {
     app.$text = $('#message');
 
     app.loadMsgs();
-    setInterval (app.loadMsgs.bind(app), 1000);
+    setInterval (app.loadMsgs.bind(app), 3000);
 
     $('#send').on('submit', app.handleSubmit);
   },
@@ -54,7 +54,7 @@ app = {
 
   renderMessage: function(message) {
     var $user = $('<div>', {class: 'user'}).text(message.username);
-    var $text = $('<div>', {class: 'text'}).text(message.text);
+    var $text = $('<div>', {class: 'text'}).text(message.message);
     var $message = $('<div>', {class: 'chat', 'data-id': message.objectId }).append($user, $text);
     return $message;
   },
@@ -68,6 +68,7 @@ app = {
   },
 
   displayMessages: function(messages) {
+    console.log('displayMessages', messages);
     for (var i = messages.length; i > 0; i--) {
       app.displayMessage(messages[i - 1]);
     }
@@ -95,10 +96,13 @@ app = {
       data: message,
       contentType: 'application/json',
       success: function(json) {
+        console.log('is this a successful post request??????????');
         message.objectId = json.objectId;
         app.displayMessage(message);
       },
       complete: function() {
+        console.log('is this a bad request??????????');
+        console.log('message', message);
         app.stopSpinner();
       }
     });

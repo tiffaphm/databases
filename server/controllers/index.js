@@ -4,8 +4,11 @@ var queryString = require('query-string');
 module.exports = {
   messages: {
     get: function (req, res) {
+      res.writeHead(200, {'Content-Type': 'application/json'});
+
       models.messages.get(function(result) {
-        res.send(JSON.stringify(result));
+        var obj = {results: result};
+        res.end(JSON.stringify(obj));
       });
 
     }, // a function which handles a get request for all messages

@@ -6,16 +6,15 @@ module.exports = {
       var sql = 'SELECT username, message, roomname FROM messages';
       db.dbConnection.query(sql, function (err, result) {
         if (err) { console.log(err); }
-        console.log('aawerwerqwer', result);
         callback(result);
       });
      
     }, // a function which produces all the messages
     post: function (body) {
+      console.log('post request recieved is', body);
       var message = body.message;
       var roomname = body.roomname;
       var username = body.username;
-      console.log(message);
       var sql = `INSERT INTO messages (username, message, roomname) VALUES ("${username}", "${message}", "${roomname}")`;
       db.dbConnection.query(sql, function (err, result) {
         if (err) { console.log(err); }
