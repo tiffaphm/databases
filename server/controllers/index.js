@@ -5,8 +5,6 @@ module.exports = {
   messages: {
     get: function (req, res) {
       models.messages.get(function(result) {
-        //res.writeHead(200, {'Content-Type': 'application/json'});
-        console.log('resulsltulstuls', JSON.stringify(result));
         res.send(JSON.stringify(result));
       });
 
