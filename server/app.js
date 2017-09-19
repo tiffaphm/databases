@@ -20,6 +20,7 @@ app.use(parser.json());
 
 // Set up our routes
 app.use('/classes', router);
+console.log('checking router setup');
 
 // Serve the client files
 app.use(express.static(__dirname + '/../client'));
