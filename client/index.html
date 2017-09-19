@@ -18,15 +18,45 @@
 
     <div id="controls">
       <div id="post">
-        <h1>Post a Message</h1>
-        <form class="submit">
+        <h3>Add Username</h3>
+        <form class="submit-new-user">
+          <div id="userandroom">
+            <p>
+            <label for="username" value="create new username">
+            <input class="new-username-input" id="userName" type="text" placeholder="create new user"/>
+            </p>
+          </div>
+          <div id="submitbutton" class="newUser">
+            <input id="submitButton" type="submit" value="submit"/>
+          </div>
+        </form>
+      </div>
+
+      <div id="post">
+        <h3>Add Room</h3>
+        <form class="submit-new-room">
+          <div id="userandroom">
+            <p>
+              <label for="roomname" value="create new room">
+              <input class="new-roomname-input" id="roomName" type="text" placeholder="create new room"/>
+            </p>
+          </div>
+          <div id="submitbutton" class="newRoom">
+            <input id="submitButton" type="submit" value="submit"/>
+          </div>
+        </form>
+      </div>
+      
+      <div id="post">
+        <h3>Post a Message</h3>
+        <form class="submit-new-message">
           <div id="userandroom">
             <p>
               <label for="username" value="username">
               <input class="usernameInput" id="userName" type="text" placeholder="username"/>
             </p>
           </div>
-          <div id="submitbutton">
+          <div id="submitbutton" class="add-message">
             <input id="submitButton" type="submit" value="submit"/>
           </div>
           <p>
@@ -42,7 +72,7 @@
       getData();
       setInterval(getData, 7500);
 
-      $('.submit').on('submit', function(event) {
+      $('.submit-new-message').on('submit', function(event) {
         event.preventDefault();
         var username = $('.usernameInput').val();
         $('#backButton').toggle();

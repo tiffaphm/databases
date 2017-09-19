@@ -13,7 +13,6 @@ module.exports = {
 
     }, // a function which handles a get request for all messages
     post: function (req, res) {
-      console.log('checking if POST request is working');
       var body = req.body;
       req.statusCode = 302;
       res.end();
@@ -24,21 +23,19 @@ module.exports = {
   users: {
     // Ditto as above
     get: function (req, res) {
-      console.log('users get request');
       // get all users from model/db
       // response back with the usernames
       res.writeHead(200, {'Content-Type': 'application/json'});
 
       models.users.get(null, function(result) {
-        console.log('users get request is', result);
         var obj = {results: result};
         res.end(JSON.stringify(obj));
       });
 
     },
     post: function (req, res) {
+      console.log('checking if post request is working');
       var body = req.body;
-      console.log('username post req is', body);
       req.statusCode = 302;
       res.end();
       models.users.post(body.username);

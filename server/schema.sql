@@ -52,7 +52,8 @@ DROP TABLE IF EXISTS `users`;
     
 CREATE TABLE `users` (
   `id` INTEGER(10) NOT NULL AUTO_INCREMENT,
-  `username` VARCHAR(100) NOT NULL,
+  `username` VARCHAR(100) NOT NULL UNIQUE,
+  CONSTRAINT `id_username` UNIQUE (id, username),
   PRIMARY KEY (`id`)
 );
 
@@ -65,7 +66,8 @@ DROP TABLE IF EXISTS `rooms`;
     
 CREATE TABLE `rooms` (
   `id` INTEGER(10) NOT NULL AUTO_INCREMENT,
-  `roomname` VARCHAR(100) NOT NULL,
+  `roomname` VARCHAR(100) NOT NULL UNIQUE,
+  CONSTRAINT `id_roomname` UNIQUE (id, roomname),
   PRIMARY KEY (`id`)
 );
 

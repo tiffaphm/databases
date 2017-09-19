@@ -7,6 +7,8 @@ $.ajaxPrefilter(function(settings, _, jqXHR) {
 //-------------- BEGIN VARIABLE/FUNCTION DECLARATIONS ---------------------
 
 var SERVER_URL = 'http://127.0.0.1:3000/classes/messages';
+var USERS_URL = 'http://127.0.0.1:3000/classes/users';
+var ROOMS_URL = 'http://127.0.0.1:3000/classes/rooms';
 
 //This one calls the Parse server to grab data, and sends it to processData
 var getData = function() {
@@ -92,6 +94,42 @@ var displayData = function(data, user) {
       }
       getData();
     }
+  });
+
+  $('.submit-new-user').on('submit', function(event) {
+    var username = $('.new-username-input').val();
+    $.ajax({
+      url: USERS_URL,
+      contentType: 'application/json',
+      type: 'POST',
+      data: JSON.stringify({
+        username: username
+      }),
+      success: function(data) {
+        console.log('User successfully added!', data);
+      },
+      error: function(data) {
+        console.log(data);
+      }
+    });
+  });
+
+  $('.submit-new-room').on('submit', function(event) {
+    var roomname = $('.new-roomname-input').val();
+    $.ajax({
+      url: ROOMS_URL,
+      contentType: 'application/json',
+      type: 'POST',
+      data: JSON.stringify({
+        roomname: roomname
+      }),
+      success: function(data) {
+        console.log('Room successfully added!', data);
+      },
+      error: function(data) {
+        console.log(data);
+      }
+    });
   });
 
   $('.addUser').on('click', function() {

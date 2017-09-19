@@ -8,7 +8,6 @@ module.exports = {
       db.dbConnection.query(sql, function (err, result) {
         if (err) { console.log(err); }
         var newArray = [];
-        console.log('this is the result', result);
         for (let i = 0; i < result.length; i++) {
           let obj = {};
           
@@ -28,25 +27,25 @@ module.exports = {
       var obj = {};
 
       // text
-      obj['text'] = body.text;
-      
-      // roomId
-      var sql = `SELECT id FROM rooms WHERE roomname = "${body.roomname}"`;
-      module.exports.rooms.get(sql, (roomId) => {
-        obj['roomId'] = roomId;
-      });
+      obj.text = body.text;
 
       // userId
-      var sql = `SELECT id FROM users WHERE username = "${body.username}"`;
-      module.exports.users.get(sql, (userId) => {
-        obj['userId'] = userId;
+      var sql = `SELECT users.id as username_id, rooms.id as roomname_id FROM users, rooms WHERE username = "${body.username}" AND roomname = "${body.roomname}"`;
+      db.dbConnection.query(sql, (err, result) => {
+        if (obj.username_id === undefined) {
+
+        }
+        obj.username_id = result[0].username_id;
+        obj.roomname_id = result[0].roomname_id;
+
+        var sql = 'INSERT IGNORE INTO messages SET ?';
+        db.dbConnection.query(sql, obj, function (err, result) {
+          if (err) { console.log(err); }
+          console.log('message inserted');
+        });
       });
 
-      var sql = `INSERT INTO messages (username_id, roomname_id, text) VALUES (${obj['userId']}, ${obj['roomId']}, "${obj['text']}")`;
-      db.dbConnection.query(sql, function (err, result) {
-        if (err) { console.log(err); }
-        console.log('message inserted');
-      });
+      
     } // a function which can be used to insert a message into the database
   },
 
@@ -60,8 +59,7 @@ module.exports = {
       });
     },
     post: function (username) {
-      console.log('post username is', username);
-      var sql = `INSERT INTO users (username) VALUES ("${username}")`;
+      var sql = `INSERT IGNORE INTO users (username) VALUES ("${username}")`;
       db.dbConnection.query(sql, function (err, result) {
         if (err) { console.log(err); }
         console.log('username inserted');
@@ -78,7 +76,7 @@ module.exports = {
       });
     },
     post: function(roomname) {
-      var sql = `INSERT INTO rooms (roomname) VALUES ("${roomname}")`;
+      var sql = `INSERT IGNORE INTO rooms (roomname) VALUES ("${roomname}")`;
       db.dbConnection.query(sql, function (err, result) {
         if (err) { console.log(err); }
         console.log('roomname inserted');
