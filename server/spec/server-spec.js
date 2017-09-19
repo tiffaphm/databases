@@ -20,7 +20,14 @@ describe('Persistent Node Chat Server', function() {
 
     /* Empty the db table before each test so that multiple tests
      * (or repeated runs of the tests) won't screw each other up: */
-    dbConnection.query('truncate ' + tablename, done);
+    dbConnection.query('truncate ' + tablename, function() {
+      request({
+        method: 'POST',
+        uri: 'http://127.0.0.1:3000/classes/rooms',
+        json: { roomname: 'Hello' }
+      });
+      done();
+    });
   });
 
   afterEach(function() {
@@ -53,7 +60,6 @@ describe('Persistent Node Chat Server', function() {
         var queryArgs = [];
 
         dbConnection.query(queryString, queryArgs, function(err, results) {
-          console.log('results from the query', results);
           // Should have one result:
           expect(results.length).to.equal(1);
 
@@ -80,7 +86,7 @@ describe('Persistent Node Chat Server', function() {
         uri: 'http://127.0.0.1:3000/classes/messages',
         json: {
           username: 'Valjean',
-          text: 'Men like you can never change!',
+          text: 'In mercy\'s name, three days is all I need.',
           roomname: 'Hello'
         }
       }, function () {
@@ -96,8 +102,9 @@ describe('Persistent Node Chat Server', function() {
           // Now query the Node chat server and see if it returns
           // the message we just inserted:
           request('http://127.0.0.1:3000/classes/messages', function(error, response, body) {
+            console.log(body);
             var messageLog = JSON.parse(body).results;
-            expect(messageLog[0].text).to.equal('Men like you can never change!');
+            expect(messageLog[0].text).to.equal('In mercy\'s name, three days is all I need.');
             expect(messageLog[0].roomname).to.equal('Hello');
             done();
           });
