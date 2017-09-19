@@ -3,27 +3,22 @@ var db = require('../db');
 module.exports = {
   messages: {
     get: function (callback) {
-      var sql = 'SELECT username_id, roomname_id, text FROM messages';
+      // var sql = 'SELECT username_id, roomname_id, text FROM messages';
+      var sql = 'select messages.text, users.username, rooms.roomname from messages, users, rooms where messages.username_id = users.id AND messages.roomname_id=rooms.id;';
       db.dbConnection.query(sql, function (err, result) {
         if (err) { console.log(err); }
         var newArray = [];
+        console.log('this is the result', result);
         for (let i = 0; i < result.length; i++) {
           let obj = {};
           
           obj['text'] = result[i].text;
+          obj['username'] = result[i].username;
+          obj['roomname'] = result[i].roomname;
           
-          var sql = `SELECT username FROM users WHERE id = ${result[i].username_id}`; 
-          module.exports.users.get(sql, (username) => {
-            obj['username'] = username; 
-          });
-      
-          var sql = `SELECT roomname FROM rooms WHERE id = ${result[i].roomname_id}`;    
-          module.exports.rooms.get(sql, (roomname) => {
-            obj['roomname'] = roomname; 
-          });
-
           newArray.push(obj);
         }
+
         callback(newArray);
       });
      
@@ -65,6 +60,7 @@ module.exports = {
       });
     },
     post: function (username) {
+      console.log('post username is', username);
       var sql = `INSERT INTO users (username) VALUES ("${username}")`;
       db.dbConnection.query(sql, function (err, result) {
         if (err) { console.log(err); }

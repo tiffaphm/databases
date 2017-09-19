@@ -38,6 +38,7 @@ module.exports = {
     },
     post: function (req, res) {
       var body = req.body;
+      console.log('username post req is', body);
       req.statusCode = 302;
       res.end();
       models.users.post(body.username);
