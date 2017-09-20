@@ -44,24 +44,12 @@ module.exports = {
           req.statusCode = 302;
           res.end();
         });
-      // console.log('checking if post request is working');
-      // var body = req.body;
-      
-      // models.users.post(body.username);
     }
   },
 
   rooms: {
     // Ditto as above
     get: function (req, res) {
-      // get all users from model/db
-      // response back with the roomnames
-
-      // models.rooms.get(null, function(result) {
-      //   var obj = {results: result};
-      //   res.end(JSON.stringify(obj));
-      // });
-
       models.rooms.get()
         .then((data) => {
           res.writeHead(200, {'Content-Type': 'application/json'});
@@ -71,9 +59,11 @@ module.exports = {
     },
     post: function (req, res) {
       var body = req.body;
-      req.statusCode = 302;
-      res.end();
-      models.rooms.post(body.roomname);
+      models.rooms.post(body.roomname)
+        .then(() => {
+          req.statusCode = 302;
+          res.end();
+        });
     }
   }
 };
