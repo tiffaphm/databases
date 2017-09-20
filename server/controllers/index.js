@@ -4,12 +4,12 @@ var queryString = require('query-string');
 module.exports = {
   messages: {
     get: function (req, res) {
-      res.writeHead(200, {'Content-Type': 'application/json'});
-
-      models.messages.get(function(result) {
-        var obj = {results: result};
-        res.end(JSON.stringify(obj));
-      });
+      models.messages.get()
+        .then((data) => {
+          res.writeHead(200, {'Content-Type': 'application/json'});
+          var obj = {results: data};
+          res.end(JSON.stringify(obj));
+        });
 
     }, // a function which handles a get request for all messages
     post: function (req, res) {
@@ -23,22 +23,31 @@ module.exports = {
   users: {
     // Ditto as above
     get: function (req, res) {
-      // get all users from model/db
-      // response back with the usernames
-      res.writeHead(200, {'Content-Type': 'application/json'});
-
-      models.users.get(null, function(result) {
-        var obj = {results: result};
-        res.end(JSON.stringify(obj));
-      });
+      
+      models.users.get()
+        .then((data) => {
+          res.writeHead(200, {'Content-Type': 'application/json'});
+          var obj = {results: data};
+          res.end(JSON.stringify(obj));
+        })
+        .catch((err) => {
+          res.statusCode = 404; // needs a review/testing
+          console.log(err);
+          res.end();
+        });
 
     },
     post: function (req, res) {
-      console.log('checking if post request is working');
       var body = req.body;
-      req.statusCode = 302;
-      res.end();
-      models.users.post(body.username);
+      models.users.post(body.username)
+        .then(() => {
+          req.statusCode = 302;
+          res.end();
+        });
+      // console.log('checking if post request is working');
+      // var body = req.body;
+      
+      // models.users.post(body.username);
     }
   },
 
@@ -47,13 +56,18 @@ module.exports = {
     get: function (req, res) {
       // get all users from model/db
       // response back with the roomnames
-      res.writeHead(200, {'Content-Type': 'application/json'});
 
-      models.rooms.get(null, function(result) {
-        var obj = {results: result};
-        res.end(JSON.stringify(obj));
-      });
+      // models.rooms.get(null, function(result) {
+      //   var obj = {results: result};
+      //   res.end(JSON.stringify(obj));
+      // });
 
+      models.rooms.get()
+        .then((data) => {
+          res.writeHead(200, {'Content-Type': 'application/json'});
+          var obj = {results: data};
+          res.end(JSON.stringify(obj));
+        });
     },
     post: function (req, res) {
       var body = req.body;

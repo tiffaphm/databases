@@ -1,28 +1,61 @@
-var db = require('../db');
+// var db = require('../db');
+var Sequelize = require('sequelize');
+var db = new Sequelize('chat', 'root', 'plantlife');
+
+
+var Messages = db.define('Messages', {
+  id: {
+    type: Sequelize.INTEGER,
+    primaryKey: true
+  },
+  text: Sequelize.STRING,
+  username_id: {
+    type: Sequelize.INTEGER,
+    references: "Users",
+    referencesKey: "id"
+  },
+  roomname_id: {
+    type: Sequelize.INTEGER,
+    references: "Rooms",
+    referencesKey: "id"
+  }
+}, {
+  timestamps: false
+});
+
+var Users = db.define('Users', {
+  id: {
+    type: Sequelize.INTEGER,
+    primaryKey: true
+  },
+  username: Sequelize.STRING
+}, {
+  timestamps: false
+});
+
+var Rooms = db.define('Rooms', {
+  id: {
+    type: Sequelize.INTEGER,
+    primaryKey: true
+  },
+  roomname: Sequelize.STRING
+}, {
+  timestamps: false
+});
+
+
+
 
 module.exports = {
   messages: {
-    get: function (callback) {
-      // var sql = 'SELECT username_id, roomname_id, text FROM messages';
-      var sql = 'select messages.text, users.username, rooms.roomname from messages, users, rooms where messages.username_id = users.id AND messages.roomname_id=rooms.id;';
-      db.dbConnection.query(sql, function (err, result) {
-        if (err) { console.log(err); }
-        var newArray = [];
-        for (let i = 0; i < result.length; i++) {
-          let obj = {};
-          
-          obj['text'] = result[i].text;
-          obj['username'] = result[i].username;
-          obj['roomname'] = result[i].roomname;
-          
-          newArray.push(obj);
-        }
-
-        callback(newArray);
-      });
-     
+    get: function () {
+      var messages = Messages.findAll();
+      return messages;
     }, // a function which produces all the messages
     post: function (body) {
+
+
+
       console.log('post request recieved is', body);
       var obj = {};
 
@@ -38,7 +71,7 @@ module.exports = {
         obj.username_id = result[0].username_id;
         obj.roomname_id = result[0].roomname_id;
 
-        var sql = 'INSERT IGNORE INTO messages SET ?';
+        var sql = 'INSERT INTO messages SET ?';
         db.dbConnection.query(sql, obj, function (err, result) {
           if (err) { console.log(err); }
           console.log('message inserted');
@@ -51,32 +84,29 @@ module.exports = {
 
   users: {
     // Ditto as above.
-    get: function (sql, callback) {
-      var sql = sql || 'SELECT username from users';
-      db.dbConnection.query(sql, function (err, result) {
-        if (err) { console.log(err); }
-        callback(result);
-      });
+    get: function () {
+      return Users.findAll();
     },
     post: function (username) {
-      var sql = `INSERT IGNORE INTO users (username) VALUES ("${username}")`;
-      db.dbConnection.query(sql, function (err, result) {
-        if (err) { console.log(err); }
-        console.log('username inserted');
+      return Users.create({
+        username: username
       });
     }
   },
 
   rooms: {
-    get: function(sql, callback) {
-      var sql = sql || 'SELECT roomname from rooms';
-      db.dbConnection.query(sql, function (err, result) {
-        if (err) { console.log(err); }
-        callback(result);
-      });
+    get: function() {
+      var rooms = Rooms.findAll();
+      return rooms;
+
+      // var sql = sql || 'SELECT roomname from rooms';
+      // db.dbConnection.query(sql, function (err, result) {
+      //   if (err) { console.log(err); }
+      //   callback(result);
+      // });
     },
     post: function(roomname) {
-      var sql = `INSERT IGNORE INTO rooms (roomname) VALUES ("${roomname}")`;
+      var sql = `INSERT INTO rooms (roomname) VALUES ("${roomname}")`;
       db.dbConnection.query(sql, function (err, result) {
         if (err) { console.log(err); }
         console.log('roomname inserted');
